@@ -15,6 +15,10 @@ public class CitiesController : CustomControllerBase
     }
 
     // GET: api/Cities
+    /// <summary>
+    ///     Get all cities including city name and ID
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<City>>> GetCities()
     {
