@@ -3,7 +3,7 @@ using CitiesManager.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace CitiesManager.WebAPI.Controllers;
+namespace CitiesManager.WebAPI.Controllers.v1;
 
 public class CitiesController : CustomControllerBase
 {
