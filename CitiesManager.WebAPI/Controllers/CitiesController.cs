@@ -20,6 +20,7 @@ public class CitiesController : CustomControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
+    // [Produces("application/xml")]
     public async Task<ActionResult<IEnumerable<City>>> GetCities()
     {
         return await _context.Cities.OrderBy(x => x.CityName).ToListAsync();
