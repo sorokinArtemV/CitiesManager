@@ -1,5 +1,4 @@
-using System.Configuration;
-using CitiesManager.WebAPI.DataBaseContext;
+using CitiesManager.Infrastucture.DataBaseContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
