@@ -2,6 +2,7 @@ using CitiesManager.WebAPI.DataBaseContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,13 +24,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "WebAPI.xml"));
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "CitiesManager.WebAPI",
         Version = "1.0"
     });
 
-    options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
+    options.SwaggerDoc("v2", new OpenApiInfo
     {
         Title = "CitiesManager.WebAPI",
         Version = "2.0"
@@ -39,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddVersionedApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;`
+    options.SubstituteApiVersionInUrl = true;
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
