@@ -33,8 +33,4 @@
       <Folder Include="Client\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="Client\CitiesAngularApp\.DS_Store" />
-    </ItemGroup>
-
 </Project>
