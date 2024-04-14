@@ -54,8 +54,18 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policyBuilder =>
     {
         policyBuilder.WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()!);
+        policyBuilder.WithHeaders("Authorization", "origin", "content-type", "accept");
+        policyBuilder.WithMethods("GET", "POST", "PUT", "DELETE");
         // builder.WithOrigins("*");
     });
+    
+    options.AddPolicy("4100Client", policyBuilder =>
+    {
+        policyBuilder.WithOrigins(builder.Configuration.GetSection("AllowedOrigins2").Get<string[]>()!);
+        policyBuilder.WithHeaders("Authorization", "origin", "accept");
+        policyBuilder.WithMethods("GET");
+    });
+    
 });
 
 var app = builder.Build();
