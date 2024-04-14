@@ -39,7 +39,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddVersionedApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
+    options.SubstituteApiVersionInUrl = true;`
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
