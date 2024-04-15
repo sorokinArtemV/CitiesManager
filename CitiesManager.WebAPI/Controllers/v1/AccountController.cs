@@ -72,7 +72,6 @@ public class AccountController : CustomControllerBase
     /// <returns></returns>
     [HttpPost("login")]
     [TypeFilter(typeof(ModelValidationFilter))]
-
     public async Task<IActionResult> PostLogin(LoginDto loginDto)
     {
         var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, false, false);
