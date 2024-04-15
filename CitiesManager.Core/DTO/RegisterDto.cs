@@ -18,7 +18,7 @@ public class RegisterDto
     [Remote("IsEmailAlreadyInUse", "Account", ErrorMessage = "Email already in use")]
     public string PhoneNumber { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Phone password is required")]
+    [Required(ErrorMessage = "Password is required")]
     public string Password { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Phone password is required")]
