@@ -79,7 +79,7 @@ public class AccountController : CustomControllerBase
     /// <param name="loginDto"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    public async Task<ActionResult<ApplicationUser>> PostLogin(LoginDto loginDto)
+    public async Task<IActionResult> PostLogin(LoginDto loginDto)
     {
         if (!ModelState.IsValid)
         {
