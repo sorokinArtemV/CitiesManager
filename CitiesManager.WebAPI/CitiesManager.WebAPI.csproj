@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
@@ -30,7 +30,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Client\" />
+        <Folder Include="ClientApp\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\angular.json"/>
+        <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\package-lock.json"/>
+        <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\package.json"/>
+        <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\tsconfig.app.json"/>
+        <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\tsconfig.json"/>
+        <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\tsconfig.spec.json"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CitiesManager.Core\CitiesManager.Core.csproj" />
+      <ProjectReference Include="..\CitiesManager.Infrastructure\CitiesManager.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
