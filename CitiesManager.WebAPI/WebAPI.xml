@@ -26,7 +26,7 @@
         </member>
         <member name="M:CitiesManager.WebAPI.Controllers.v1.AccountController.PostLogin(CitiesManager.Core.DTO.LoginDto)">
             <summary>
-            Login
+                Login
             </summary>
             <param name="loginDto"></param>
             <returns></returns>

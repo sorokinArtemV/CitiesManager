@@ -1,5 +1,6 @@
 using CitiesManager.Core.DTO;
 using CitiesManager.Core.Identity;
+using CitiesManager.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,18 +40,9 @@ public class AccountController : CustomControllerBase
     /// <param name="registerDto"></param>
     /// <returns></returns>
     [HttpPost]
-    // [TypeFilter(typeof(ModelValidationFilter))]
+    [TypeFilter(typeof(ModelValidationFilter))]
     public async Task<ActionResult<ApplicationUser>> PostRegister(RegisterDto registerDto)
     {
-        if (!ModelState.IsValid)
-        {
-            var errorMessage = string.Join(", ", ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage));
-
-            return Problem(errorMessage);
-        }
-
         var user = new ApplicationUser
         {
             UserName = registerDto.Email,
@@ -68,28 +60,21 @@ public class AccountController : CustomControllerBase
         }
 
         {
-            var errorMessage = string.Join(", ", result.Errors);
+            var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
             return Problem(errorMessage);
         }
     }
 
     /// <summary>
-    /// Login
+    ///     Login
     /// </summary>
     /// <param name="loginDto"></param>
     /// <returns></returns>
     [HttpPost("login")]
+    [TypeFilter(typeof(ModelValidationFilter))]
+
     public async Task<IActionResult> PostLogin(LoginDto loginDto)
     {
-        if (!ModelState.IsValid)
-        {
-            var errorMessage = string.Join(", ", ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage));
-
-            return Problem(errorMessage);
-        }
-
         var result = await _signInManager.PasswordSignInAsync(loginDto.Email, loginDto.Password, false, false);
 
         if (result.Succeeded)
@@ -103,8 +88,8 @@ public class AccountController : CustomControllerBase
 
         return Problem("Invalid email or password");
     }
-    
-    
+
+
     [HttpGet("logout")]
     public async Task<ActionResult<ApplicationUser>> GetLogout()
     {
