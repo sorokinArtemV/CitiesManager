@@ -1,4 +1,7 @@
+using CitiesManager.Core.Identity;
 using CitiesManager.Infrastucture.DataBaseContext;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
@@ -57,15 +60,29 @@ builder.Services.AddCors(options =>
         policyBuilder.WithMethods("GET", "POST", "PUT", "DELETE");
         // builder.WithOrigins("*");
     });
-    
+
     options.AddPolicy("4100Client", policyBuilder =>
     {
         policyBuilder.WithOrigins(builder.Configuration.GetSection("AllowedOrigins2").Get<string[]>()!);
         policyBuilder.WithHeaders("Authorization", "origin", "accept");
         policyBuilder.WithMethods("GET");
     });
-    
 });
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+    {
+        options.Password.RequiredLength = 3;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequiredUniqueChars = 0;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders()
+    .AddUserStore<UserStore<ApplicationUser, ApplicationRole, ApplicationDbContext, Guid>>()
+    .AddRoleStore<RoleStore<ApplicationRole, ApplicationDbContext, Guid>>();
 
 var app = builder.Build();
 
@@ -80,12 +97,14 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseHsts();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
 app.UseCors();
 
-app.UseHsts();
-app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
