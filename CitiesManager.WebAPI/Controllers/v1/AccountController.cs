@@ -1,5 +1,6 @@
 using CitiesManager.Core.DTO;
 using CitiesManager.Core.Identity;
+using CitiesManager.Core.ServiceContracts;
 using CitiesManager.WebAPI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,9 +15,11 @@ namespace CitiesManager.WebAPI.Controllers.v1;
 [ApiVersion("1.0")]
 public class AccountController : CustomControllerBase
 {
+    private readonly IJwtService _jwtService;
     private readonly RoleManager<ApplicationRole> _roleManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+
 
     /// <summary>
     ///     Account controller
@@ -24,14 +27,17 @@ public class AccountController : CustomControllerBase
     /// <param name="userManager"></param>
     /// <param name="roleManager"></param>
     /// <param name="signInManager"></param>
+    /// <param name="jwtService"></param>
     public AccountController(
         UserManager<ApplicationUser> userManager,
         RoleManager<ApplicationRole> roleManager,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager,
+        IJwtService jwtService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _signInManager = signInManager;
+        _jwtService = jwtService;
     }
 
     /// <summary>
@@ -51,12 +57,16 @@ public class AccountController : CustomControllerBase
             PersonName = registerDto.PersonName
         };
 
+        // Create User
         var result = await _userManager.CreateAsync(user, registerDto.Password);
 
         if (result.Succeeded)
         {
             await _signInManager.SignInAsync(user, false);
-            return Ok(user);
+
+            var authResponse = _jwtService.CreateJwtToken(user);
+
+            return Ok(authResponse);
         }
 
         {
@@ -82,7 +92,12 @@ public class AccountController : CustomControllerBase
 
             if (user is null) return NoContent();
 
-            return Ok(new { user.PersonName, user.Email });
+            await _signInManager.SignInAsync(user, false);
+
+            var authResponse = _jwtService.CreateJwtToken(user);
+
+
+            return Ok(authResponse);
         }
 
         return Problem("Invalid email or password");
