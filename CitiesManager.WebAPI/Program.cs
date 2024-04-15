@@ -1,5 +1,6 @@
 using CitiesManager.Core.Identity;
 using CitiesManager.Infrastucture.DataBaseContext;
+using CitiesManager.WebAPI.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new ProducesAttribute("application/json"));
     options.Filters.Add(new ConsumesAttribute("application/json"));
+    options.Filters.Add(new ModelValidationFilter());
 }).AddXmlSerializerFormatters();
 
 builder.Services.AddApiVersioning(config =>
