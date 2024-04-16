@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RegisterUser } from '../models/register-user';
-import { AccountService } from '../services/account.service';
-import { CompareValidation } from '../validators/custom-validators';
+import {Component} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AccountService} from '../services/account.service';
+import {CompareValidation} from '../validators/custom-validators';
 
 @Component({
   selector: 'app-register',
@@ -17,12 +16,12 @@ export class RegisterComponent {
 
   constructor(private accountService: AccountService, private router: Router) {
     this.registerForm = new FormGroup({
-      personName: new FormControl(null, [Validators.required]),
-      email: new FormControl(null, [Validators.required]),
-      phoneNumber: new FormControl(null, [Validators.required]),
-      password: new FormControl(null, [Validators.required]),
-      confirmPassword: new FormControl(null, [Validators.required])
-    },
+        personName: new FormControl(null, [Validators.required]),
+        email: new FormControl(null, [Validators.required]),
+        phoneNumber: new FormControl(null, [Validators.required]),
+        password: new FormControl(null, [Validators.required]),
+        confirmPassword: new FormControl(null, [Validators.required])
+      },
       {
         validators: [CompareValidation("password", "confirmPassword")]
       });
@@ -55,10 +54,12 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
 
       this.accountService.postRegister(this.registerForm.value).subscribe({
-        next: (response: RegisterUser) => {
+        next: (response: any) => {
           console.log(response);
 
           this.isRegisterFormSubmitted = false;
+
+          localStorage["token"] = response.token;
 
           this.router.navigate(['/cities']);
 
@@ -69,7 +70,8 @@ export class RegisterComponent {
           console.log(error);
         },
 
-        complete: () => { },
+        complete: () => {
+        },
       });
     }
   }

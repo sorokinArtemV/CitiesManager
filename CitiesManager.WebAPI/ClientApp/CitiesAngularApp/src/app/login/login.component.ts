@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoginUser } from '../models/login-user';
-import { AccountService } from '../services/account.service';
+import {Component} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AccountService} from '../services/account.service';
 
 @Component({
   selector: 'app-login',
@@ -37,11 +36,13 @@ export class LoginComponent {
     if (this.loginForm.valid) {
 
       this.accountService.postLogin(this.loginForm.value).subscribe({
-        next: (response: LoginUser) => {
+        next: (response: any) => {
           console.log(response);
 
           this.isLoginFormSubmitted = false;
           this.accountService.currentUserName = response.email;
+
+          localStorage["token"] = response.token;
 
           this.router.navigate(['/cities']);
 
@@ -52,7 +53,8 @@ export class LoginComponent {
           console.log(error);
         },
 
-        complete: () => { },
+        complete: () => {
+        },
       });
     }
   }
