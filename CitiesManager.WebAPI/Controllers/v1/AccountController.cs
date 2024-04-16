@@ -113,7 +113,6 @@ public class AccountController : CustomControllerBase
         return Problem("Invalid email or password");
     }
 
-
     [HttpGet("logout")]
     public async Task<ActionResult<ApplicationUser>> GetLogout()
     {
@@ -121,12 +120,20 @@ public class AccountController : CustomControllerBase
         return NoContent();
     }
 
-
     [HttpGet]
     public async Task<IActionResult> IsEmailAlreadyInUse(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
 
         return user is null ? Ok(true) : Ok(false);
+    }
+
+    [HttpPost("generate-new-jwt-token")]
+    public async Task<IActionResult> GenerateNewAccessToken(TokenModel? tokenModel)
+    {
+        if (tokenModel is null) return BadRequest("Invalid client request");
+
+        var jwtToken = tokenModel.Token;
+        var refreshToken = tokenModel.RefreshToken;
     }
 }

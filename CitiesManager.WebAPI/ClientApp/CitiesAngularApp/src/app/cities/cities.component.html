@@ -4,35 +4,45 @@
   <div class="flex-1 w-50">
 
     <div class="table-container">
-      <table class="table w-100" [formGroup]="putCityForm">
+      <table [formGroup]="putCityForm" class="table w-100">
 
         <thead>
-          <tr>
-            <th>#</th>
-            <th>City Name</th>
-            <th></th>
-          </tr>
+        <tr>
+          <th>#</th>
+          <th>City Name</th>
+          <th></th>
+        </tr>
         </thead>
 
         <tbody formArrayName="cities">
-          <tr *ngFor="let city of cities; let i = index">
-            <td>{{i+1}}</td>
+        <tr *ngFor="let city of cities; let i = index">
+          <td>{{ i + 1 }}</td>
 
-            <td [formGroupName]="i">
-              <input type="text" formControlName="cityName" [ngClass]="{ 'border-less-textbox': city.cityID != editCityID, 'form-input': city.cityID == editCityID }" [disableControl]="city.cityID != editCityID" />
-            </td>
+          <td [formGroupName]="i">
+            <input [disableControl]="city.cityID != editCityID" [ngClass]="{ 'border-less-textbox': city.cityID != editCityID, 'form-input': city.cityID == editCityID }"
+                   formControlName="cityName"
+                   type="text"/>
+          </td>
 
-            <td style="width:200px">
-              <button class="button button-blue-back" (click)="editClicked(city)" *ngIf="city.cityID != editCityID" type="button">Edit</button>
+          <td style="width:200px">
+            <button (click)="editClicked(city)" *ngIf="city.cityID != editCityID" class="button button-blue-back"
+                    type="button">Edit
+            </button>
 
-              <button class="button button-blue-back" (click)="updateClicked(i)" *ngIf="city.cityID == editCityID" type="submit">Update</button>
+            <button (click)="updateClicked(i)" *ngIf="city.cityID == editCityID" class="button button-blue-back"
+                    type="submit">Update
+            </button>
 
-              <button class="button button-red-back ml" (click)="deleteClicked(city, i)" *ngIf="city.cityID != editCityID" type="button">Delete</button>
-            </td>
-          </tr>
+            <button (click)="deleteClicked(city, i)" *ngIf="city.cityID != editCityID" class="button button-red-back ml"
+                    type="button">Delete
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
+
+    <button (click)="refreshClicked()" class="button button-blue-back mt" type="button">Refresh</button>
 
   </div>
 
@@ -43,18 +53,19 @@
     <div class="form-container">
       <h3>Create City</h3>
 
-      <form [formGroup]="postCityForm" (ngSubmit)="postCitySubmitted()">
+      <form (ngSubmit)="postCitySubmitted()" [formGroup]="postCityForm">
 
         <!-- City Name-->
         <div class="form-field flex">
           <div class="w-25">
-            <label for="CityName" class="form-label pt">City Name</label>
+            <label class="form-label pt" for="CityName">City Name</label>
           </div>
 
           <div class="flex-1">
-            <input type="text" class="form-input" formControlName="cityName" />
+            <input class="form-input" formControlName="cityName" type="text"/>
 
-            <span class="text-red" *ngIf="(postCity_CityNameControl.touched || isPostCityFormSubmitted) && (postCity_CityNameControl.errors?.['required'])">City Name can't be blank</span>
+            <span *ngIf="(postCity_CityNameControl.touched || isPostCityFormSubmitted) && (postCity_CityNameControl.errors?.['required'])"
+                  class="text-red">City Name can't be blank</span>
           </div>
         </div>
 

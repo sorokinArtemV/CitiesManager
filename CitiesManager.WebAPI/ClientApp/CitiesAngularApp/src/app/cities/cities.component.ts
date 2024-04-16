@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { City } from '../models/city';
-import { CitiesService } from '../services/cities.service';
+import {Component} from '@angular/core';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {City} from '../models/city';
+import {CitiesService} from '../services/cities.service';
 
 @Component({
   selector: 'app-cities',
@@ -18,7 +18,7 @@ export class CitiesComponent {
 
   constructor(private citiesService: CitiesService) {
     this.postCityForm = new FormGroup({
-      cityName: new FormControl(null, [ Validators.required ])
+      cityName: new FormControl(null, [Validators.required])
     });
 
     this.putCityForm = new FormGroup({
@@ -26,8 +26,12 @@ export class CitiesComponent {
     });
   }
 
-  get putCityFormArray() : FormArray {
+  get putCityFormArray(): FormArray {
     return this.putCityForm.get("cities") as FormArray;
+  }
+
+  get postCity_CityNameControl(): any {
+    return this.postCityForm.controls['cityName'];
   }
 
   loadCities() {
@@ -40,7 +44,7 @@ export class CitiesComponent {
           this.cities.forEach(city => {
             this.putCityFormArray.push(new FormGroup({
               cityID: new FormControl(city.cityID, [Validators.required]),
-              cityName: new FormControl({ value: city.cityName, disabled: true }, [Validators.required]),
+              cityName: new FormControl({value: city.cityName, disabled: true}, [Validators.required]),
             }));
           });
         },
@@ -49,20 +53,14 @@ export class CitiesComponent {
           console.log(error)
         },
 
-        complete: () => { }
+        complete: () => {
+        }
       });
   }
-
 
   ngOnInit() {
     this.loadCities();
   }
-
-
-  get postCity_CityNameControl(): any {
-    return this.postCityForm.controls['cityName'];
-  }
-
 
   public postCitySubmitted() {
     this.isPostCityFormSubmitted = true;
@@ -77,7 +75,7 @@ export class CitiesComponent {
 
         this.putCityFormArray.push(new FormGroup({
           cityID: new FormControl(response.cityID, [Validators.required]),
-          cityName: new FormControl({ value: response.cityName, disabled: true }, [Validators.required]),
+          cityName: new FormControl({value: response.cityName, disabled: true}, [Validators.required]),
         }))
         this.cities.push(new City(response.cityID, response.cityName));
 
@@ -90,12 +88,13 @@ export class CitiesComponent {
         console.log(error);
       },
 
-      complete: () => { }
+      complete: () => {
+      }
     });
   }
 
   //Executes when the clicks on 'Edit' button the for the particular city
-  editClicked(city: City) : void {
+  editClicked(city: City): void {
     this.editCityID = city.cityID;
   }
 
@@ -115,11 +114,12 @@ export class CitiesComponent {
         console.log(error);
       },
 
-      complete: () => {},
+      complete: () => {
+      },
     });
   }
 
-  deleteClicked(city: City, i: number) : void {
+  deleteClicked(city: City, i: number): void {
     if (confirm(`Are you sure to delete this city: ${city.cityName}?`)) {
       this.citiesService.deleteCity(city.cityID).subscribe({
         next: (response: string) => {
@@ -133,8 +133,13 @@ export class CitiesComponent {
           console.log(error);
         },
 
-        complete: () => { },
+        complete: () => {
+        },
       })
     }
+  }
+
+  refreshClicked(): void {
+
   }
 }
