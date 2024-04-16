@@ -138,7 +138,7 @@ public class AccountController : CustomControllerBase
 
         if (principal is null) return BadRequest("Invalid client request");
 
-        var email = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+        var email = principal.FindFirstValue(ClaimTypes.Email);
 
         var user = await _userManager.FindByEmailAsync(email!);
 

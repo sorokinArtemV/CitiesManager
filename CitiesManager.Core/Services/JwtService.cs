@@ -32,7 +32,8 @@ public class JwtService : IJwtService
 
             // optional claims
             new Claim(ClaimTypes.NameIdentifier, user.Email), // unique identifier for user (email)
-            new Claim(ClaimTypes.Name, user.PersonName) // unique identifier for user (name)
+            new Claim(ClaimTypes.Name, user.PersonName), // unique identifier for user (name)
+            new Claim(ClaimTypes.Email, user.Email)
         ];
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
