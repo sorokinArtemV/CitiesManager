@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using CitiesManager.Core.DTO;
 using CitiesManager.Core.Identity;
 using CitiesManager.Core.ServiceContracts;
@@ -135,5 +136,25 @@ public class AccountController : CustomControllerBase
 
         var jwtToken = tokenModel.Token;
         var refreshToken = tokenModel.RefreshToken;
+
+        var principal = _jwtService.GetPrincipalFromExpiredToken(jwtToken);
+
+        if (principal is null) return BadRequest("Invalid client request");
+
+        var email = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = await _userManager.FindByEmailAsync(email!);
+
+        if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryDateTime <= DateTime.UtcNow)
+        {
+            return BadRequest("Invalid client request");
+        }
+        
+        var authenticationResponse = _jwtService.CreateJwtToken(user);
+        user.RefreshToken = authenticationResponse.RefreshToken;
+        
+        await _userManager.UpdateAsync(user);
+        
+        return Ok(authenticationResponse);
     }
 }
