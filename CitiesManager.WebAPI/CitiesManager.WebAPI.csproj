@@ -31,10 +31,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="ClientApp\"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\angular.json"/>
         <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\package-lock.json"/>
         <_ContentIncludedByDefault Remove="Client\CitiesAngularApp\package.json"/>
