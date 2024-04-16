@@ -133,11 +133,8 @@ public class AccountController : CustomControllerBase
     public async Task<IActionResult> GenerateNewAccessToken(TokenModel? tokenModel)
     {
         if (tokenModel is null) return BadRequest("Invalid client request");
-
-        var jwtToken = tokenModel.Token;
-        var refreshToken = tokenModel.RefreshToken;
-
-        var principal = _jwtService.GetPrincipalFromExpiredToken(jwtToken);
+        
+        var principal = _jwtService.GetPrincipalFromExpiredToken(tokenModel.Token);
 
         if (principal is null) return BadRequest("Invalid client request");
 
@@ -145,7 +142,7 @@ public class AccountController : CustomControllerBase
 
         var user = await _userManager.FindByEmailAsync(email!);
 
-        if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryDateTime <= DateTime.UtcNow)
+        if (user is null || user.RefreshToken != tokenModel.RefreshToken || user.RefreshTokenExpiryDateTime <= DateTime.UtcNow)
         {
             return BadRequest("Invalid client request");
         }
