@@ -1,6 +1,6 @@
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using CitiesManager.Core.DTO;
 using CitiesManager.Core.Identity;
@@ -50,12 +50,26 @@ public class JwtService : IJwtService
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.WriteToken(tokenGenerator);
 
-        return new AuthenticationResponse()
+        return new AuthenticationResponse
         {
             Token = token,
             Email = user.Email,
             PersonName = user.PersonName,
-            Expiration = expiration
+            Expiration = expiration,
+            RefreshToken = GenerateRefreshToken(),
+            RefreshTokenExpirationDateTime = DateTime.UtcNow
+                .AddMinutes(Convert.ToDouble(_configuration["RefreshToken:EXPIRATION_MINUTES"]))
         };
+    }
+
+    private string GenerateRefreshToken()
+    {
+        var bytes = new byte[64];
+
+        var randomNumberGenerator = RandomNumberGenerator.Create();
+
+        randomNumberGenerator.GetBytes(bytes);
+
+        return Convert.ToBase64String(bytes);
     }
 }

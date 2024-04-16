@@ -66,6 +66,11 @@ public class AccountController : CustomControllerBase
 
             var authResponse = _jwtService.CreateJwtToken(user);
 
+            user.RefreshToken = authResponse.RefreshToken;
+            user.RefreshTokenExpiryDateTime = authResponse.RefreshTokenExpirationDateTime;
+            
+            await _userManager.UpdateAsync(user);
+
             return Ok(authResponse);
         }
 

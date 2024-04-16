@@ -120,6 +120,9 @@ namespace CitiesManager.WebAPI.Migrations
                     b.Property<string>("RefreshToken")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("RefreshTokenExpiryDateTime")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("TEXT");
 
