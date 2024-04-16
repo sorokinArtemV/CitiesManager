@@ -68,7 +68,7 @@ public class AccountController : CustomControllerBase
 
             user.RefreshToken = authResponse.RefreshToken;
             user.RefreshTokenExpiryDateTime = authResponse.RefreshTokenExpirationDateTime;
-            
+
             await _userManager.UpdateAsync(user);
 
             return Ok(authResponse);
@@ -100,6 +100,11 @@ public class AccountController : CustomControllerBase
             await _signInManager.SignInAsync(user, false);
 
             var authResponse = _jwtService.CreateJwtToken(user);
+
+            user.RefreshToken = authResponse.RefreshToken;
+            user.RefreshTokenExpiryDateTime = authResponse.RefreshTokenExpirationDateTime;
+
+            await _userManager.UpdateAsync(user);
 
 
             return Ok(authResponse);
