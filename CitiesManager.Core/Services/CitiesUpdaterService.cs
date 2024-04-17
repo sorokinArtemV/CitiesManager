@@ -20,13 +20,13 @@ public class CitiesUpdaterService : ICitiesUpdaterService
     }
 
 
-    public async Task<CityDto> UpdateCityAsync(CityDto? cityDto)
+    public async Task<CityDto?> UpdateCityAsync(CityDto? cityDto)
     {
         ArgumentNullException.ThrowIfNull(cityDto);
 
         var neededCity = await _citiesRepository.GetCityAsync(cityDto.CityId);
 
-        if (neededCity is null) throw new InvalidCityIdException("Invalid city ID");
+        if (neededCity is null) return null;
         
         await _citiesRepository.UpdateCityAsync(_mapper.Map<City>(cityDto));
         

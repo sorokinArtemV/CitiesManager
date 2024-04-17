@@ -13,18 +13,21 @@ public class CitiesController : CustomControllerBase
 {
     private readonly ICitiesAdderService _citiesAdderService;
     private readonly ICitiesGetterService _citiesGetterService;
+    private readonly ICitiesUpdaterService _citiesUpdaterService;
+
     private readonly ApplicationDbContext _context;
 
 
     public CitiesController(
         ApplicationDbContext context,
         ICitiesGetterService citiesGetterService,
-        ICitiesAdderService citiesAdderService
-    )
+        ICitiesAdderService citiesAdderService,
+        ICitiesUpdaterService citiesUpdaterService)
     {
         _context = context;
         _citiesGetterService = citiesGetterService;
         _citiesAdderService = citiesAdderService;
+        _citiesUpdaterService = citiesUpdaterService;
     }
 
     // GET: api/Cities
@@ -52,19 +55,19 @@ public class CitiesController : CustomControllerBase
 
     // PUT: api/Cities/5
     [HttpPut("{cityId}")]
-    public async Task<IActionResult> PutCity(Guid cityId, [Bind(nameof(City.CityId), nameof(City.CityName))] City city)
+    public async Task<IActionResult> PutCity(Guid cityId,
+        [Bind(nameof(City.CityId), nameof(City.CityName))] CityDto cityDto)
     {
-        if (cityId != city.CityId) return BadRequest();
+        if (cityId != cityDto.CityId) return BadRequest();
 
-        var neededCity = await _context.Cities.FindAsync(cityId);
+        var neededCity = _citiesGetterService.GetCityAsync(cityId);
 
         if (neededCity is null) return NotFound();
 
-        neededCity.CityName = city.CityName;
 
         try
         {
-            await _context.SaveChangesAsync();
+            await _citiesUpdaterService.UpdateCityAsync(cityDto);
         }
         catch (DbUpdateConcurrencyException)
         {
@@ -78,10 +81,11 @@ public class CitiesController : CustomControllerBase
     // POST: api/Cities
     [HttpPost]
     public async Task<ActionResult<CityDto>> PostCity(
-        [Bind(nameof(CityDto.CityId), nameof(CityDto.CityName))] CityDto cityDto)
+        [Bind(nameof(CityDto.CityId), nameof(CityDto.CityName))]
+        CityDto cityDto)
     {
         var city = await _citiesAdderService.AddCityAsync(cityDto);
-        
+
         return CreatedAtAction("GetCity", new { cityId = city.CityId }, city);
     }
 

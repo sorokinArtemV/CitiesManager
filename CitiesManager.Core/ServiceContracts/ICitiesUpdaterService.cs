@@ -12,5 +12,5 @@ public interface ICitiesUpdaterService
     /// </summary>
     /// <param name="cityDto"></param>
     /// <returns></returns>
-    public Task<CityDto> UpdateCityAsync(CityDto? cityDto);
+    public Task<CityDto?> UpdateCityAsync(CityDto? cityDto);
 }

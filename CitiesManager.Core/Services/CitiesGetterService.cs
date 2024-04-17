@@ -26,7 +26,7 @@ public class CitiesGetterService : ICitiesGetterService
 
     public async Task<CityDto?> GetCityAsync(Guid? cityId)
     {
-        ArgumentNullException.ThrowIfNull(cityId);
+        if (cityId is null) return null;
         
         var city = await _citiesRepository.GetCityAsync(cityId.Value);
         

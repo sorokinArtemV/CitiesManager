@@ -129,8 +129,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
 builder.Services.AddScoped<ICitiesGetterService, CitiesGetterService>();
 builder.Services.AddScoped<ICitiesAdderService, CitiesAdderService>();
+builder.Services.AddScoped<ICitiesUpdaterService, CitiesUpdaterService>();
 // builder.Services.AddScoped<ICitiesDeleterService, CitiesDeleterService>();
-// builder.Services.AddScoped<ICitiesUpdaterService, CitiesUpdaterService>();
 
 var app = builder.Build();
 
