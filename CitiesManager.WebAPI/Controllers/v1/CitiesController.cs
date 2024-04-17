@@ -12,8 +12,10 @@ namespace CitiesManager.WebAPI.Controllers.v1;
 public class CitiesController : CustomControllerBase
 {
     private readonly ICitiesAdderService _citiesAdderService;
+    private readonly ICitiesDeleterService _citiesDeleterService;
     private readonly ICitiesGetterService _citiesGetterService;
     private readonly ICitiesUpdaterService _citiesUpdaterService;
+
 
     private readonly ApplicationDbContext _context;
 
@@ -22,12 +24,14 @@ public class CitiesController : CustomControllerBase
         ApplicationDbContext context,
         ICitiesGetterService citiesGetterService,
         ICitiesAdderService citiesAdderService,
-        ICitiesUpdaterService citiesUpdaterService)
+        ICitiesUpdaterService citiesUpdaterService,
+        ICitiesDeleterService citiesDeleterService)
     {
         _context = context;
         _citiesGetterService = citiesGetterService;
         _citiesAdderService = citiesAdderService;
         _citiesUpdaterService = citiesUpdaterService;
+        _citiesDeleterService = citiesDeleterService;
     }
 
     // GET: api/Cities
@@ -71,7 +75,7 @@ public class CitiesController : CustomControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!CityExists(cityId)) return NotFound();
+            if (await CityExists(cityId) == false) return NotFound();
             throw;
         }
 
@@ -90,14 +94,12 @@ public class CitiesController : CustomControllerBase
     }
 
     // DELETE: api/Cities/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteCity(Guid id)
+    [HttpDelete("{cityId}")]
+    public async Task<IActionResult> DeleteCity(Guid cityId)
     {
-        var city = await _context.Cities.FindAsync(id);
-        if (city == null) return NotFound();
+        var isCityDeleted = await _citiesDeleterService.DeleteCityAsync(cityId);
 
-        _context.Cities.Remove(city);
-        await _context.SaveChangesAsync();
+        if (!isCityDeleted) return NotFound();
 
         return NoContent();
     }
