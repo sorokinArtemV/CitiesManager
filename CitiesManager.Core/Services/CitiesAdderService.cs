@@ -11,6 +11,6 @@ public class CitiesAdderService : ICitiesAdderService
 
     public async Task<CityDto> AddCityAsync(CityDto? cityDto)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(cityDto);
     }
 }
