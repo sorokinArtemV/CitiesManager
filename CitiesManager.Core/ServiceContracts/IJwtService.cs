@@ -1,6 +1,6 @@
 using System.Security.Claims;
+using CitiesManager.Core.Domain.Identity;
 using CitiesManager.Core.DTO;
-using CitiesManager.Core.Identity;
 
 namespace CitiesManager.Core.ServiceContracts;
 

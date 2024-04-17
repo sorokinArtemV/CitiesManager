@@ -1,4 +1,6 @@
-using CitiesManager.Core.Entities;
+using CitiesManager.Core.Domain.Entities;
+using CitiesManager.Core.DTO;
+using CitiesManager.Core.ServiceContracts;
 using CitiesManager.Infrastucture.DataBaseContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +12,13 @@ namespace CitiesManager.WebAPI.Controllers.v1;
 public class CitiesController : CustomControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly ICitiesGetterService _citiesGetterService;
+  
 
-    public CitiesController(ApplicationDbContext context)
+    public CitiesController(ApplicationDbContext context, ICitiesGetterService citiesGetterService)
     {
         _context = context;
+        _citiesGetterService = citiesGetterService;
     }
 
     // GET: api/Cities
@@ -23,9 +28,10 @@ public class CitiesController : CustomControllerBase
     /// <returns></returns>
     [HttpGet]
     // [Produces("application/xml")]
-    public async Task<ActionResult<IEnumerable<City>>> GetCities()
+    public async Task<ActionResult<IEnumerable<CityDto>>> GetCities()
     {
-        return await _context.Cities.OrderBy(x => x.CityName).ToListAsync();
+        // return await _context.Cities.OrderBy(x => x.CityName).ToListAsync();
+        return await _citiesGetterService.GetAllCitiesAsync();
     }
 
     // GET: api/Cities/5

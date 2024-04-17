@@ -1,4 +1,4 @@
-using CitiesManager.Core.Entities;
+using CitiesManager.Core.Domain.Entities;
 
 namespace CitiesManager.Core.Domain.RepositoryContracts;
 

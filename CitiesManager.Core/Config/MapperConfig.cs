@@ -1,6 +1,6 @@
 using AutoMapper;
+using CitiesManager.Core.Domain.Entities;
 using CitiesManager.Core.DTO;
-using CitiesManager.Core.Entities;
 
 namespace CitiesManager.Core.Config;
 

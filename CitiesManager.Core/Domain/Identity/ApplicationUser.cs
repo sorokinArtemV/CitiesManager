@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace CitiesManager.Core.Identity;
+namespace CitiesManager.Core.Domain.Identity;
 
 public class ApplicationUser : IdentityUser<Guid>
 {

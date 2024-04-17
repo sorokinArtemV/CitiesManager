@@ -1,5 +1,5 @@
+using CitiesManager.Core.Domain.Entities;
 using CitiesManager.Core.Domain.RepositoryContracts;
-using CitiesManager.Core.Entities;
 using CitiesManager.Infrastucture.DataBaseContext;
 using Microsoft.EntityFrameworkCore;
 

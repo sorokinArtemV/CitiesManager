@@ -1,10 +1,12 @@
 using System.Text;
-using CitiesManager.Core.Identity;
+using CitiesManager.Core.Config;
+using CitiesManager.Core.Domain.Identity;
+using CitiesManager.Core.Domain.RepositoryContracts;
 using CitiesManager.Core.ServiceContracts;
 using CitiesManager.Core.Services;
 using CitiesManager.Infrastucture.DataBaseContext;
+using CitiesManager.Infrastucture.Repositories;
 using CitiesManager.WebAPI.Filters;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,11 +25,10 @@ builder.Services.AddControllers(options =>
     options.Filters.Add(new ProducesAttribute("application/json"));
     options.Filters.Add(new ConsumesAttribute("application/json"));
     options.Filters.Add(new ModelValidationFilter());
-    
+
     // Policy
     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
     options.Filters.Add(new AuthorizeFilter(policy));
-
 }).AddXmlSerializerFormatters();
 
 builder.Services.AddTransient<IJwtService, JwtService>();
@@ -103,10 +104,10 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 
 // Jwt
 builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -121,7 +122,15 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+
 builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<ICitiesRepository, CitiesRepository>();
+builder.Services.AddScoped<ICitiesGetterService, CitiesGetterService>();
+// builder.Services.AddScoped<ICitiesAdderService, CitiesAdderService>();
+// builder.Services.AddScoped<ICitiesDeleterService, CitiesDeleterService>();
+// builder.Services.AddScoped<ICitiesUpdaterService, CitiesUpdaterService>();
 
 var app = builder.Build();
 

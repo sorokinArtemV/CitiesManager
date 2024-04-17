@@ -1,5 +1,5 @@
-using CitiesManager.Core.Entities;
-using CitiesManager.Core.Identity;
+using CitiesManager.Core.Domain.Entities;
+using CitiesManager.Core.Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
