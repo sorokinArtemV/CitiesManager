@@ -1,10 +1,11 @@
+using CitiesManager.Core.Domain.RepositoryContracts;
 using CitiesManager.Core.Entities;
 using CitiesManager.Infrastucture.DataBaseContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace CitiesManager.Infrastucture.Repositories;
 
-public class CitiesRepository
+public class CitiesRepository : ICitiesRepository
 {
     private readonly ApplicationDbContext _db;
 
