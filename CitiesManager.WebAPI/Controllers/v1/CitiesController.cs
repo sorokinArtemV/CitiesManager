@@ -56,14 +56,14 @@ public class CitiesController : CustomControllerBase
     // PUT: api/Cities/5
     [HttpPut("{cityId}")]
     public async Task<IActionResult> PutCity(Guid cityId,
-        [Bind(nameof(City.CityId), nameof(City.CityName))] CityDto cityDto)
+        [Bind(nameof(City.CityId), nameof(City.CityName))]
+        CityDto cityDto)
     {
         if (cityId != cityDto.CityId) return BadRequest();
 
         var neededCity = _citiesGetterService.GetCityAsync(cityId);
 
         if (neededCity is null) return NotFound();
-
 
         try
         {
@@ -102,8 +102,9 @@ public class CitiesController : CustomControllerBase
         return NoContent();
     }
 
-    private bool CityExists(Guid id)
+    private async Task<bool> CityExists(Guid id)
     {
-        return _context.Cities.Any(e => e.CityId == id);
+        var city = await _citiesGetterService.GetCityAsync(id);
+        return city is not null;
     }
 }
