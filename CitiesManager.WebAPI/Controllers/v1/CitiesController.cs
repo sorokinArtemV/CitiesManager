@@ -11,14 +11,20 @@ namespace CitiesManager.WebAPI.Controllers.v1;
 // [EnableCors("4100Client")]
 public class CitiesController : CustomControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ICitiesAdderService _citiesAdderService;
     private readonly ICitiesGetterService _citiesGetterService;
-  
+    private readonly ApplicationDbContext _context;
 
-    public CitiesController(ApplicationDbContext context, ICitiesGetterService citiesGetterService)
+
+    public CitiesController(
+        ApplicationDbContext context,
+        ICitiesGetterService citiesGetterService,
+        ICitiesAdderService citiesAdderService
+    )
     {
         _context = context;
         _citiesGetterService = citiesGetterService;
+        _citiesAdderService = citiesAdderService;
     }
 
     // GET: api/Cities
@@ -35,9 +41,9 @@ public class CitiesController : CustomControllerBase
 
     // GET: api/Cities/5
     [HttpGet("{cityId}")]
-    public async Task<ActionResult<City>> GetCity(Guid cityId)
+    public async Task<ActionResult<CityDto>> GetCity(Guid cityId)
     {
-        var city = await _context.Cities.FindAsync(cityId);
+        var city = await _citiesGetterService.GetCityAsync(cityId);
 
         if (city == null) return Problem("City not found", statusCode: 400, title: "City search");
 
@@ -71,12 +77,12 @@ public class CitiesController : CustomControllerBase
 
     // POST: api/Cities
     [HttpPost]
-    public async Task<ActionResult<City>> PostCity([Bind(nameof(City.CityId), nameof(City.CityName))] City city)
+    public async Task<ActionResult<CityDto>> PostCity(
+        [Bind(nameof(CityDto.CityId), nameof(CityDto.CityName))] CityDto cityDto)
     {
-        _context.Cities.Add(city);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction("GetCity", new { cityId = city.CityId }, city);
+        await _citiesAdderService.AddCityAsync(cityDto);
+        
+        return CreatedAtAction("GetCity", new { cityId = cityDto.CityId }, cityDto);
     }
 
     // DELETE: api/Cities/5
