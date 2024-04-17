@@ -80,9 +80,9 @@ public class CitiesController : CustomControllerBase
     public async Task<ActionResult<CityDto>> PostCity(
         [Bind(nameof(CityDto.CityId), nameof(CityDto.CityName))] CityDto cityDto)
     {
-        await _citiesAdderService.AddCityAsync(cityDto);
+        var city = await _citiesAdderService.AddCityAsync(cityDto);
         
-        return CreatedAtAction("GetCity", new { cityId = cityDto.CityId }, cityDto);
+        return CreatedAtAction("GetCity", new { cityId = city.CityId }, city);
     }
 
     // DELETE: api/Cities/5

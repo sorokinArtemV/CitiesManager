@@ -21,10 +21,10 @@ public class CitiesAdderService : ICitiesAdderService
     public async Task<CityDto> AddCityAsync(CityDto? cityDto)
     {
         ArgumentNullException.ThrowIfNull(cityDto);
-        
+
         var city = _mapper.Map<City>(cityDto);
         await _citiesRepository.AddCityAsync(city);
-        
+
         return _mapper.Map<CityDto>(city);
     }
 }
